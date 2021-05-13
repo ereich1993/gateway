@@ -2,24 +2,17 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using PaymentGateway.ApiClient;
-using PaymentGateway.Common.Interfaces;
-using PaymentGateway.Data;
-using PaymentGateway.Data.Access;
-using PaymentGateway.Services;
-using PaymentGateway.Services.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PaymentGateway
+namespace PaymentGateway.BankSimulatorApi
 {
     public class Startup
     {
@@ -37,18 +30,8 @@ namespace PaymentGateway
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PaymentGateway", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PaymentGateway.BankSimulatorApi", Version = "v1" });
             });
-            var connection = Configuration.GetConnectionString("sqlDb");
-            services.AddDbContext<PaymentsGatewayDbContext>
-                (options => options.UseSqlServer(connection, b => b.MigrationsAssembly("PaymentGateway.Data")));
-
-            services.AddTransient<IPaymentService, PaymentService>();
-            services.AddTransient<IPaymentApiClient, PaymentApiClient>();
-            services.AddTransient<IPaymentCommandRepository, PaymentCommandRepository>();
-            services.AddTransient<IPaymentQueryRepository, PaymentQueryRepository>();
-            services.AddTransient<IPaymentConverter, PaymentConverter>();
-            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,7 +41,7 @@ namespace PaymentGateway
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PaymentGateway v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PaymentGateway.BankSimulatorApi v1"));
             }
 
             app.UseHttpsRedirection();
