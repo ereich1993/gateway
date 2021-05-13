@@ -1,7 +1,10 @@
 Payment Gateway my solution
 
-In order to create the database connection string should be changed in appsettings.json
-Run "dotnet ef database update" from the database project
+-- Set mulitple startup projects 
+	-PaymentGateway.Api
+	-PaymentGateway.BankSimulator.Api
+-- replace connection string in appsettings.json
+-- Run "dotnet ef database update" from the database project
 
 I tried to focus mostly on getting the project structure in a good state where each component can be maintained extended and tested.
 Therefore I rely heavily on interfaces and dependency injection.
